@@ -39,11 +39,13 @@ if(USE_MYMATH)
     target_link_libraries(MathFunctions
         PRIVATE 
         SqrtLibrary
+        tutorial_compiler_flags
     )
 endif()
 
 # define the symbol starting we are using the declspec(dllexport) when building on window
 target_compile_definitions(MathFunctions PRIVATE "EXPORTING_MYMATH")
+target_link_libraries(MathFunctions PRIVATE tutorial_compiler_flags)
 
 # install rules
 set(installable_libs MathFunctions)
