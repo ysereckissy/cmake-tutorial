@@ -1,27 +1,26 @@
 cmake_minimum_required(VERSION 3.22)
 # set the project name
 project(Tutorial VERSION 1.1)
-# define some global variables
-set(USE_MYMATH "Use tutorial provided math implementation" ON)
-
-configure_file(TutorialConfig.h.in TutorialConfig.h)
-
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-if(USE_MYMATH)
-    # add the MathFunctions library
-    add_subdirectory(MathFunctions)
-    list(APPEND EXTRA_LIBS MathFunctions)
-endif()
+# control where the static and the shared libraries are built so that on windows
+# we don't need to tinker with the path to run the executable
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+configure_file(TutorialConfig.h.in TutorialConfig.h)
+# add the MathFunctions library
+add_subdirectory(MathFunctions)
 # add executable
 add_executable(Tutorial tutorial.cxx)
 
 target_link_libraries(Tutorial 
     PUBLIC 
-    ${EXTRA_LIBS}
+    MathFunctions
 )
 
 target_include_directories(Tutorial 
